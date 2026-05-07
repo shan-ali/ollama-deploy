@@ -1,17 +1,21 @@
-# ollama-deploy <!-- no toc -->
+# ollama-deploy <!-- omit from toc -->
 
 Deploy ollama locally using Docker
 
-## Table of Contents <!-- no toc -->
+## Table of Contents <!-- omit from toc -->
+- [Requirements](#requirements)
+  - [Software Requirements](#software-requirements)
+  - [Optional Requirements](#optional-requirements)
+  - [Hardware Requirements](#hardware-requirements)
 
 ## Requirements
 
 ### Software Requirements
 
-1. docker
-2. docker-compose
-3. nvidia drivers
-4. nvidia-container-toolkit
+1. `docker`
+2. `docker-compose`
+3. `nvidia` drivers
+4. `nvidia-container-toolkit`
 
 **Run the following to check for missing requirements:**
 ```
