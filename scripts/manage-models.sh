@@ -7,10 +7,13 @@ sleep 15
 
 # add models here to pull
 models=(
-  "qwen3.5:4b"
-  "qwen2.5-coder:7b"
+  #"qwen3.5:4b"
+  "qwen3.5:9b"
+  #"qwen2.5-coder:7b"
+  #"qwen2.5-coder:14b"
   # "llama3.2:3b-instruct-q8_0"
   # "mistral:7b"
+  "gemma3:4b"
 )
 
 mapfile -t current_models < <(ollama ls | awk 'NR>1 {print $1}')
@@ -42,7 +45,6 @@ if [ ${#model[@]} -gt 0 ]; then
   for model in "${models[@]}"; do
       printf 'Installing model: "%s"\n' "$model"
       ollama pull "$model" > /dev/null 2>&1
-      printf 'Completed installing model: "%s"\n' "$model"
   done
 fi
 
