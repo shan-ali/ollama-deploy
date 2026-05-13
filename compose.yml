@@ -1,29 +1,12 @@
 services:
-  ollama:
-    image: "${DOCKER_IMAGE}"
-    container_name: ollama
-    pull_policy: missing
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama:/root/.ollama
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [ gpu ]
-    restart: unless-stopped
-
   model-manager:
-    image: "${DOCKER_IMAGE}"
+    image: ${OLLAMA_IMAGE_AMD}
     container_name: model-manager
     volumes:
       - ollama:/root/.ollama
       - ./scripts:/scripts:ro
     environment:
-      - OLLAMA_HOST=http://ollama:11434
+      - OLLAMA_HOST=${OLLAMA_HOST}
     depends_on:
       - ollama
     entrypoint: [ "/bin/bash" ] # override the ollama entrypoint

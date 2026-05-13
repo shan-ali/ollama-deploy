@@ -7,6 +7,11 @@ Deploy ollama locally using Docker
   - [Software Requirements](#software-requirements)
   - [Optional Requirements](#optional-requirements)
   - [Hardware Requirements](#hardware-requirements)
+    - [NVIDIA](#nvidia)
+    - [AMD](#amd)
+- [Running based on environment](#running-based-on-environment)
+  - [NVIDIA](#nvidia-1)
+  - [AMD](#amd-1)
 
 ## Requirements
 
@@ -14,8 +19,8 @@ Deploy ollama locally using Docker
 
 1. `docker`
 2. `docker-compose`
-3. `nvidia` drivers
-4. `nvidia-container-toolkit`
+3. `nvidia` drivers (optional)
+4. `nvidia-container-toolkit` (optional)
 
 **Run the following to check for missing requirements:**
 ```
@@ -57,11 +62,11 @@ Swap: 8 GiB
 
 ### NVIDIA
 ```
-docker compose --env-file .env.nvidia up
+docker compose -f compose.yml -f compose.nvidia.yml --env-file ./env/.env up
 ```
 
 ### AMD
 ```
-docker compose --env-file .env.amd up
+docker compose -f compose.yml -f compose.amd.yml --env-file ./env/.env up
 ```
 

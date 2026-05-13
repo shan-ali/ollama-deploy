@@ -11,7 +11,7 @@ models=(
   #"qwen3.5:9b"
   #"qwen2.5-coder:7b"
   #"qwen2.5-coder:14b"
-   "llama3.2:3b-instruct-q8_0"
+  #  "llama3.2:3b-instruct-q8_0"
   # "mistral:7b"
   #"gemma3:4b"
 )

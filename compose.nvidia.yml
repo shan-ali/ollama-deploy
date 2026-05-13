@@ -1,0 +1,17 @@
+services:
+  ollama:
+    image: ${OLLAMA_IMAGE_NVIDIA}
+    container_name: ${OLLAMA_CONTAINTER_NAME}
+    pull_policy: ${OLLAMA_PULL_POLICY}
+    ports:
+      - ${OLLAMA_PORTS}
+    volumes:
+      - ${OLLAMA_VOLUMES}
+    restart: ${OLLAMA_RESTART}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
