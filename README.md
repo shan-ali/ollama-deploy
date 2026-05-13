@@ -34,8 +34,9 @@ nvidia-ctk --version
 
 ### Hardware Requirements
 
-This homelab was done with the following system
+This homelab was done on the following systems
 
+#### NVIDIA
 ```
 OS: Fedora Linux 42 (Workstation Edition) x86_64
 CPU: AMD Ryzen 7 3700X (16) @ 4.43 GHz
@@ -44,4 +45,23 @@ Memory: 16 GiB
 Swap: 8.00 GiB
 ```
 
+#### AMD
+```
+CPU: AMD Ryzen AI 9 365 (20) @ 2.00 GHz
+GPU: AMD Radeon 880M Graphics [Integrated]
+Memory: 24 GiB
+Swap: 8 GiB
+```
+
+## Running based on environment
+
+### NVIDIA
+```
+docker compose --env-file .env.nvidia up
+```
+
+### AMD
+```
+docker compose --env-file .env.amd up
+```
 

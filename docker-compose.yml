@@ -1,6 +1,6 @@
 services:
   ollama:
-    image: ollama/ollama:latest
+    image: "${DOCKER_IMAGE}"
     container_name: ollama
     pull_policy: missing
     ports:
@@ -17,7 +17,7 @@ services:
     restart: unless-stopped
 
   model-manager:
-    image: ollama/ollama:latest
+    image: "${DOCKER_IMAGE}"
     container_name: model-manager
     volumes:
       - ollama:/root/.ollama
