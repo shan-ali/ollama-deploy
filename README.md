@@ -52,6 +52,7 @@ Swap: 8.00 GiB
 
 #### AMD
 ```
+OS: Fedora Linux 43 (Workstation Edition) x86_64
 CPU: AMD Ryzen AI 9 365 (20) @ 2.00 GHz
 GPU: AMD Radeon 880M Graphics [Integrated]
 Memory: 24 GiB
@@ -62,11 +63,11 @@ Swap: 8 GiB
 
 ### NVIDIA
 ```
-docker compose -f compose.yml -f compose.nvidia.yml --env-file ./env/.env up
+docker compose -f compose.yml -f compose.nvidia.yml --env-file ./env/dev/.env up
 ```
 
 ### AMD
 ```
-docker compose -f compose.yml -f compose.amd.yml --env-file ./env/.env up
+docker compose -f compose.yml -f compose.amd.yml --env-file ./env/dev/.env up
 ```
 
