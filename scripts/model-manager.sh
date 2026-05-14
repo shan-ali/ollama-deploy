@@ -8,9 +8,6 @@ sleep 15
 # read models from env var
 IFS=',' read -ra models <<< "$OLLAMA_MODELS"
 
-echo "Models to be installed/updated:"
-printf '  %s\n' "${models[@]}"
-
 # get currently installed models
 mapfile -t current_models < <(ollama ls | awk 'NR>1 {print $1}')
 
@@ -28,9 +25,15 @@ for model in "${current_models[@]}"; do
   fi
 done
 
+printf '\033[0;33mModels to be removed:\033[0m\n'
+printf '\033[0;33m  %s\033[0m\n' "${models_to_remove[@]}"
+
+printf '\033[0;36mModels to be installed/updated:\033[0m\n'
+printf '\033[0;36m  %s\033[0m\n' "${models[@]}"
+
 if [ ${#models_to_remove[@]} -gt 0 ]; then
   for model in "${models_to_remove[@]}"; do
-    printf 'Removing model: "%s"\n' "$model"
+    printf '\033[0;33mRemoving model: "%s"\033[0m\n' "$model"
     ollama rm "$model" > /dev/null 2>&1
   done
 fi
@@ -38,9 +41,9 @@ fi
 # install models in models
 if [ ${#model[@]} -gt 0 ]; then
   for model in "${models[@]}"; do
-      printf 'Installing model: "%s"\n' "$model"
+      printf '\033[0;36mInstalling model: "%s"\033[0m\n' "$model"
       ollama pull "$model" > /dev/null 2>&1
   done
 fi
 
-
+printf "\033[0;32mModels syncing has completed successfully!\033[0m\n"
