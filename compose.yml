@@ -1,17 +1,18 @@
 services:
   model-manager:
-    image: ${OLLAMA_IMAGE_AMD}
+    image: ${OLLAMA_IMAGE}
     container_name: model-manager
     volumes:
       - ollama:/root/.ollama
-      - ./scripts:/scripts:ro
+      - ./scripts:/tmp/scripts:ro
     environment:
       - OLLAMA_HOST=${OLLAMA_HOST}
+      - OLLAMA_MODELS=${OLLAMA_MODELS}
     depends_on:
       - ollama
-    entrypoint: [ "/bin/bash" ] # override the ollama entrypoint
-    command: [ "/scripts/manage-models.sh" ]
-    restart: no # run once and exit
+    entrypoint: [ "/bin/bash" ]
+    command: [ "/tmp/scripts/model-manager.sh" ]
+    restart: "no"
 
   open-webui:
     image: ghcr.io/open-webui/open-webui:main

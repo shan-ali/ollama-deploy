@@ -5,12 +5,16 @@
 # sleepy time
 sleep 15
 
+# read models from env var
 IFS=',' read -ra models <<< "$OLLAMA_MODELS"
 
+echo "Models to be installed/updated:"
+printf '  %s\n' "${models[@]}"
+
+# get currently installed models
 mapfile -t current_models < <(ollama ls | awk 'NR>1 {print $1}')
 
 # remove models that are currently installed but are not in the models list
-
 declare -A lookup
 models_to_remove=()
 
