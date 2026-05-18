@@ -9,7 +9,8 @@ Deploy ollama locally using Docker
   - [Hardware Requirements](#hardware-requirements)
     - [NVIDIA](#nvidia)
     - [AMD](#amd)
-- [Running based on environment](#running-based-on-environment)
+- [Running based on setup](#running-based-on-setup)
+  - [CPU](#cpu)
   - [NVIDIA](#nvidia-1)
   - [AMD](#amd-1)
 
@@ -59,7 +60,12 @@ Memory: 24 GiB
 Swap: 8 GiB
 ```
 
-## Running based on environment
+## Running based on setup
+
+### CPU
+```
+docker compose -f compose.yml -f compose.cpu.yml --env-file ./env/dev/.env up
+```
 
 ### NVIDIA
 ```

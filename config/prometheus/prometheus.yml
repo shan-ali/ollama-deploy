@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 15s # how often to fetches data
+  evaluation_interval: 15s # how often to run alerting/recording rules against already-stored data
+
+scrape_configs:
+  - job_name: ollama
+    static_configs:
+      - targets: ['ollama:11434']

@@ -15,11 +15,11 @@ services:
     restart: "no"
 
   open-webui:
-    image: ghcr.io/open-webui/open-webui:main
+    image: ${OPEN_WEBUI_IMAGE}
     container_name: open-webui
     pull_policy: missing
     ports:
-      - "3000:8080"
+      - "${OPEN_WEBUI_PORTS}"
     volumes:
       - open-webui:/app/backend/data
     environment:
@@ -27,6 +27,34 @@ services:
     depends_on:
       - ollama
 
+  prometheus:
+    image: ${PROMETHEUS_IMAGE}
+    container_name: prometheus
+    pull_policy: missing
+    ports:
+      - "${PROMETHEUS_PORTS}"
+    volumes:
+      - ./config/prometheus:/etc/prometheus:ro
+      - prometheus:/prometheus
+    restart: unless-stopped
+
+  grafana:
+    image: ${GF_IMAGE}
+    container_name: grafana
+    pull_policy: missing
+    ports:
+      - "${GF_PORTS}"
+    volumes:
+      - grafana:/var/lib/grafana
+      - ./config/grafana/provisioning:/etc/grafana/provisioning:ro
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
 volumes:
   ollama:
   open-webui:
+  prometheus:
+  grafana:

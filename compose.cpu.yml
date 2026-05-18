@@ -1,0 +1,10 @@
+services:
+  ollama:
+    image: ${OLLAMA_IMAGE}
+    container_name: ${OLLAMA_CONTAINTER_NAME}
+    pull_policy: ${OLLAMA_PULL_POLICY}
+    ports:
+      - ${OLLAMA_PORTS}
+    volumes:
+      - ${OLLAMA_VOLUMES}
+    restart: ${OLLAMA_RESTART}
