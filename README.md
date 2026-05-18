@@ -9,6 +9,7 @@ Deploy ollama locally using Docker
   - [Hardware Requirements](#hardware-requirements)
     - [NVIDIA](#nvidia)
     - [AMD](#amd)
+- [Monitoring](#monitoring)
 - [Running based on setup](#running-based-on-setup)
   - [CPU](#cpu)
   - [NVIDIA](#nvidia-1)
@@ -59,6 +60,24 @@ GPU: AMD Radeon 880M Graphics [Integrated]
 Memory: 24 GiB
 Swap: 8 GiB
 ```
+
+## Monitoring
+
+Ollama does not expose a native Prometheus metrics endpoint, so this setup uses [ollama-metrics](https://github.com/NorskHelsenett/ollama-metrics) as a transparent HTTP proxy in front of Ollama. All client requests (e.g. from open-webui) are routed through it, allowing it to instrument every request and expose the data at a `/metrics` endpoint for Prometheus to scrape.
+
+The full monitoring stack:
+
+```
+open-webui:8080 → ollama-metrics:11435 → ollama:11434
+                      ↓
+             exposes /metrics
+                      ↓
+             Prometheus :9090
+                      ↓
+              Grafana :3000
+```
+
+Metrics captured include prompt/completion token counts, request duration, time-per-token, and loaded model state.
 
 ## Running based on setup
 

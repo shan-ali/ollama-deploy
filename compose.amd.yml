@@ -4,7 +4,7 @@ services:
     container_name: ${OLLAMA_CONTAINTER_NAME}
     pull_policy: ${OLLAMA_PULL_POLICY}
     ports:
-      - ${OLLAMA_PORTS}
+      - ${OLLAMA_HOST_PORT}:11434
     volumes:
       - ${OLLAMA_VOLUMES}
     restart: ${OLLAMA_RESTART}

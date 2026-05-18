@@ -14,25 +14,38 @@ services:
     command: [ "/tmp/scripts/model-manager.sh" ]
     restart: "no"
 
+  ollama-metrics:
+    image: ${OLLAMA_METRICS_IMAGE}
+    container_name: ${OLLAMA_METRICS_CONTAINTER_NAME}
+    pull_policy: missing
+    ports:
+      - "${OLLAMA_METRICS_HOST_PORT}:8080"
+    environment:
+      - OLLAMA_HOST=${OLLAMA_HOST}
+    depends_on:
+      - ollama
+    restart: unless-stopped
+
   open-webui:
     image: ${OPEN_WEBUI_IMAGE}
     container_name: open-webui
     pull_policy: missing
     ports:
-      - "${OPEN_WEBUI_PORTS}"
+      - "${OPEN_WEBUI_HOST_PORT}:8080"
     volumes:
       - open-webui:/app/backend/data
     environment:
-      - OLLAMA_BASE_URL=http://ollama:11434
+      - ENABLE_PERSISTENT_CONFIG=False # https://docs.openwebui.com/reference/env-configuration/#important-note-on-persistentconfig-environment-variables
+      - OLLAMA_BASE_URL="${OLLAMA_METRICS_HOST}"
     depends_on:
-      - ollama
+      - ollama-metrics
 
   prometheus:
     image: ${PROMETHEUS_IMAGE}
     container_name: prometheus
     pull_policy: missing
     ports:
-      - "${PROMETHEUS_PORTS}"
+      - "${PROMETHEUS_HOST_PORT}:9090"
     volumes:
       - ./config/prometheus:/etc/prometheus:ro
       - prometheus:/prometheus
@@ -43,7 +56,7 @@ services:
     container_name: grafana
     pull_policy: missing
     ports:
-      - "${GF_PORTS}"
+      - "${GF_HOST_PORT}:3000"
     volumes:
       - grafana:/var/lib/grafana
       - ./config/grafana/provisioning:/etc/grafana/provisioning:ro
