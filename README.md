@@ -13,6 +13,7 @@ A Docker Compose setup for running [Ollama](https://ollama.com) locally with a f
   - [NVIDIA](#nvidia)
   - [AMD](#amd)
 - [Endpoints](#endpoints)
+- [Open WebUI](#open-webui)
 - [Monitoring](#monitoring)
   - [How it works](#how-it-works)
   - [Grafana dashboard](#grafana-dashboard)
@@ -119,8 +120,6 @@ All host-side ports and the Grafana admin password are configurable in the same 
 | `GF_HOST_PORT`               | `3000`  | Grafana                                  |
 | `GF_SECURITY_ADMIN_PASSWORD` | `admin` | Grafana admin password — **change this** |
 
----
-
 ## Running
 
 Choose the compose override that matches your hardware. The base `compose.yml` is always included.
@@ -147,8 +146,6 @@ Uses the `ollama:rocm` image for ROCm-based GPU acceleration.
 docker compose -f compose.yml -f compose.amd.yml --env-file ./env/dev/.env up
 ```
 
----
-
 ## Endpoints
 
 Once the stack is up, the following are available on localhost:
@@ -161,7 +158,21 @@ Once the stack is up, the following are available on localhost:
 | Prometheus     | http://localhost:9090  | Metrics storage and query UI                  |
 | Grafana        | http://localhost:3000  | Dashboards (default login: `admin` / `admin`) |
 
----
+## Open WebUI
+
+[Open WebUI](https://github.com/open-webui/open-webui) is a self-hosted chat interface that connects to Ollama. It provides a ChatGPT-style experience for running and switching between local models, with support for conversation history, system prompts, and multi-model comparisons.
+
+Available at http://localhost:8080. On first launch you will be prompted to create an admin account.
+
+All requests from Open WebUI are routed through ollama-metrics so that every interaction is captured in the monitoring stack.
+
+Key features:
+- Select and switch between any model pulled by model-manager
+- Persistent conversation history stored in a local Docker volume
+- System prompt and parameter controls per conversation
+- Supports multiple users with individual accounts
+
+<img src="docs/openwebui_01.png" alt="Open WebUI" width="100%">
 
 ## Monitoring
 
@@ -174,8 +185,6 @@ Ollama does not expose a native Prometheus metrics endpoint. This setup uses [ol
 A pre-built **Ollama Overview** dashboard is provisioned automatically on startup via Grafana's file-based provisioning — no manual import or setup needed. It is available immediately at [http://localhost:3000](http://localhost:3000/d/ollama-overview/ollama-overview).
 
 <img src="docs/grafana_screenshot_01.png" alt="Ollama Overview dashboard" width="100%">
-
----
 
 ## Tested hardware
 
