@@ -9,17 +9,14 @@ A Docker Compose setup for running [Ollama](https://ollama.com) locally with a f
   - [Models](#models)
   - [Ports and credentials](#ports-and-credentials)
 - [Running](#running)
-  - [CPU](#cpu)
-  - [NVIDIA](#nvidia)
-  - [AMD](#amd)
 - [Endpoints](#endpoints)
 - [Open WebUI](#open-webui)
 - [Monitoring](#monitoring)
   - [How it works](#how-it-works)
   - [Grafana dashboard](#grafana-dashboard)
 - [Tested hardware](#tested-hardware)
-    - [NVIDIA](#nvidia-1)
-    - [AMD](#amd-1)
+    - [NVIDIA](#nvidia)
+    - [AMD](#amd)
 
 ## Architecture
 
@@ -124,13 +121,13 @@ All host-side ports and the Grafana admin password are configurable in the same 
 
 Choose the compose override that matches your hardware. The base `compose.yml` is always included.
 
-### CPU
+**CPU**
 
 ```sh
 docker compose -f compose.yml -f compose.cpu.yml --env-file ./env/dev/.env up
 ```
 
-### NVIDIA
+**NVIDIA**
 
 Requires `nvidia-container-toolkit`. See [NVIDIA's installation guide](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html).
 
@@ -138,7 +135,7 @@ Requires `nvidia-container-toolkit`. See [NVIDIA's installation guide](https://d
 docker compose -f compose.yml -f compose.nvidia.yml --env-file ./env/dev/.env up
 ```
 
-### AMD
+**AMD**
 
 Uses the `ollama:rocm` image for ROCm-based GPU acceleration.
 
