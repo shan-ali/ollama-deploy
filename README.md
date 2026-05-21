@@ -2,10 +2,10 @@
 
 A Docker Compose setup for running [Ollama](https://ollama.com) locally with the following support stack: 
 
-1. OpenWeb UI
-2. Ollama metrics proxy
-3. Prometheus
-4. Grafana
+1. [Open WebUI](https://github.com/open-webui/open-webui)
+2. [ollama-metrics](https://github.com/NorskHelsenett/ollama-metrics)
+3. [Prometheus](https://github.com/prometheus/prometheus)
+4. [Grafana](https://github.com/grafana/grafana)
 
 ## Table of Contents <!-- omit from toc -->
 - [Architecture](#architecture)
