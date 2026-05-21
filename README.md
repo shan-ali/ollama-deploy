@@ -22,6 +22,15 @@ A Docker Compose setup for running [Ollama](https://ollama.com) locally with a f
 
 ## Architecture
 
+| Service            | Role                                                                         |
+| ------------------ | ---------------------------------------------------------------------------- |
+| **ollama**         | Runs the LLM inference engine and exposes the Ollama API                     |
+| **model-manager**  | Init container that syncs the model list on startup then exits               |
+| **ollama-metrics** | Transparent HTTP proxy in front of Ollama; exposes `/metrics` for Prometheus |
+| **open-webui**     | Web-based chat interface; routes all requests through ollama-metrics         |
+| **prometheus**     | Scrapes metrics from ollama-metrics every 15 s                               |
+| **grafana**        | Visualizes Prometheus data; ships with a pre-built Ollama dashboard          |
+
 ```mermaid
 graph TB
     User(["👤 User"])
@@ -62,17 +71,6 @@ graph TB
     Prometheus --- PrometheusVol
     Grafana --- GrafanaVol
 ```
-
-The stack has five long-running services and one init container:
-
-| Service            | Role                                                                         |
-| ------------------ | ---------------------------------------------------------------------------- |
-| **ollama**         | Runs the LLM inference engine and exposes the Ollama API                     |
-| **model-manager**  | Init container that syncs the model list on startup then exits               |
-| **ollama-metrics** | Transparent HTTP proxy in front of Ollama; exposes `/metrics` for Prometheus |
-| **open-webui**     | Web-based chat interface; routes all requests through ollama-metrics         |
-| **prometheus**     | Scrapes metrics from ollama-metrics every 15 s                               |
-| **grafana**        | Visualizes Prometheus data; ships with a pre-built Ollama dashboard          |
 
 ## Prerequisites
 
@@ -173,21 +171,7 @@ Ollama does not expose a native Prometheus metrics endpoint. This setup uses [ol
 
 ### Grafana dashboard
 
-A pre-built **Ollama Overview** dashboard is provisioned automatically on startup via Grafana's file-based provisioning — no manual import or setup needed. It is available immediately at http://localhost:3000.
-
-The dashboard covers:
-
-| Panel                                | Description                                                 |
-| ------------------------------------ | ----------------------------------------------------------- |
-| Request Rate                         | Requests per second hitting the Ollama API                  |
-| Request Duration                     | Overall latency distribution across all requests            |
-| Request Duration p95 (by Model)      | 95th-percentile latency broken down per model               |
-| Token Generation Time p95 (by Model) | How long generation takes at the 95th percentile, per model |
-| Token Generation Rate (by Model)     | Tokens generated per second, per model                      |
-| Generated Tokens by Model            | Total completion tokens over time, per model                |
-| Prompt Tokens by Model               | Total prompt tokens over time, per model                    |
-| Token Prompt Rate (by Model)         | Prompt tokens processed per second, per model               |
-| Average Time per Token by Model      | Mean milliseconds per generated token, per model            |
+A pre-built **Ollama Overview** dashboard is provisioned automatically on startup via Grafana's file-based provisioning — no manual import or setup needed. It is available immediately at [http://localhost:3000](http://localhost:3000/d/ollama-overview/ollama-overview).
 
 <img src="docs/grafana_screenshot_01.png" alt="Ollama Overview dashboard" width="100%">
 
