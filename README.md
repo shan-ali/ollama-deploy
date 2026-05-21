@@ -1,6 +1,11 @@
 # ollama-deploy <!-- omit from toc -->
 
-A Docker Compose setup for running [Ollama](https://ollama.com) locally with a full supporting stack: a chat UI, a transparent metrics proxy, and a pre-wired Prometheus + Grafana monitoring stack.
+A Docker Compose setup for running [Ollama](https://ollama.com) locally with the following support stack: 
+
+1. OpenWeb UI
+2. Ollama metrics proxy
+3. Prometheus
+4. Grafana
 
 ## Table of Contents <!-- omit from toc -->
 - [Architecture](#architecture)
