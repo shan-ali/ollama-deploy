@@ -5,8 +5,8 @@
     "name": "ollama-overview",
     "namespace": "default",
     "uid": "a8e256f3-ebaa-41d2-9095-251c124c665b",
-    "resourceVersion": "1779219525521993",
-    "generation": 5,
+    "resourceVersion": "1779221644836992",
+    "generation": 6,
     "creationTimestamp": "2026-05-19T19:00:59Z",
     "labels": {
       "grafana.app/deprecatedInternalID": "3170950460067840"
@@ -15,11 +15,11 @@
       "grafana.app/createdBy": "access-policy:service",
       "grafana.app/managedBy": "classic-file-provisioning",
       "grafana.app/managerId": "default",
-      "grafana.app/sourceChecksum": "9f86812915ed05110b3103cbbec29b8f",
+      "grafana.app/sourceChecksum": "21004033c946084f6a1755b39a5baade",
       "grafana.app/sourcePath": "/etc/grafana/dashboards/ollama-overview.json",
-      "grafana.app/sourceTimestamp": "1779219520000",
+      "grafana.app/sourceTimestamp": "1779221639000",
       "grafana.app/updatedBy": "access-policy:service",
-      "grafana.app/updatedTimestamp": "2026-05-19T19:38:45Z",
+      "grafana.app/updatedTimestamp": "2026-05-19T20:14:04Z",
       "grafana.app/folder": ""
     }
   },
@@ -186,8 +186,10 @@
                       "group": "prometheus",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "histogram_quantile(0.50, rate(ollama_request_duration_seconds_bucket[5m]))",
-                        "legendFormat": "p50"
+                        "editorMode": "code",
+                        "expr": "histogram_quantile(0.50, rate(ollama_request_duration_seconds_bucket[5m])) ",
+                        "legendFormat": "p50",
+                        "range": true
                       },
                       "version": "v0"
                     },
@@ -1078,127 +1080,94 @@
       }
     },
     "layout": {
-      "kind": "GridLayout",
+      "kind": "AutoGridLayout",
       "spec": {
+        "columnWidthMode": "narrow",
         "items": [
           {
-            "kind": "GridLayoutItem",
+            "kind": "AutoGridLayoutItem",
             "spec": {
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-3"
-              },
-              "height": 5,
-              "width": 24,
-              "x": 0,
-              "y": 0
+              }
             }
           },
           {
-            "kind": "GridLayoutItem",
+            "kind": "AutoGridLayoutItem",
             "spec": {
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-17"
-              },
-              "height": 5,
-              "width": 12,
-              "x": 0,
-              "y": 5
+              }
             }
           },
           {
-            "kind": "GridLayoutItem",
+            "kind": "AutoGridLayoutItem",
             "spec": {
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-16"
-              },
-              "height": 5,
-              "width": 12,
-              "x": 12,
-              "y": 5
+              }
             }
           },
           {
-            "kind": "GridLayoutItem",
+            "kind": "AutoGridLayoutItem",
             "spec": {
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-18"
-              },
-              "height": 9,
-              "width": 12,
-              "x": 0,
-              "y": 10
+              }
             }
           },
           {
-            "kind": "GridLayoutItem",
+            "kind": "AutoGridLayoutItem",
             "spec": {
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-14"
-              },
-              "height": 9,
-              "width": 12,
-              "x": 12,
-              "y": 10
+              }
             }
           },
           {
-            "kind": "GridLayoutItem",
-            "spec": {
-              "element": {
-                "kind": "ElementReference",
-                "name": "panel-11"
-              },
-              "height": 9,
-              "width": 12,
-              "x": 0,
-              "y": 19
-            }
-          },
-          {
-            "kind": "GridLayoutItem",
-            "spec": {
-              "element": {
-                "kind": "ElementReference",
-                "name": "panel-10"
-              },
-              "height": 9,
-              "width": 12,
-              "x": 12,
-              "y": 19
-            }
-          },
-          {
-            "kind": "GridLayoutItem",
+            "kind": "AutoGridLayoutItem",
             "spec": {
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-13"
-              },
-              "height": 9,
-              "width": 12,
-              "x": 0,
-              "y": 28
+              }
             }
           },
           {
-            "kind": "GridLayoutItem",
+            "kind": "AutoGridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-11"
+              }
+            }
+          },
+          {
+            "kind": "AutoGridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-10"
+              }
+            }
+          },
+          {
+            "kind": "AutoGridLayoutItem",
             "spec": {
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-12"
-              },
-              "height": 9,
-              "width": 12,
-              "x": 12,
-              "y": 28
+              }
             }
           }
-        ]
+        ],
+        "maxColumnCount": 3,
+        "rowHeightMode": "standard"
       }
     },
     "links": [],

@@ -6,14 +6,17 @@ Deploy ollama locally using Docker
 - [Requirements](#requirements)
   - [Software Requirements](#software-requirements)
   - [Optional Requirements](#optional-requirements)
-  - [Hardware Requirements](#hardware-requirements)
+  - [Hardware](#hardware)
     - [NVIDIA](#nvidia)
     - [AMD](#amd)
-- [Monitoring](#monitoring)
-- [Running based on setup](#running-based-on-setup)
+- [Running](#running)
   - [CPU](#cpu)
   - [NVIDIA](#nvidia-1)
   - [AMD](#amd-1)
+- [Endpoints](#endpoints)
+- [Monitoring](#monitoring)
+  - [Grafana](#grafana)
+- [Architecture](#architecture)
 
 ## Requirements
 
@@ -39,7 +42,7 @@ nvidia-ctk --version
 3. `jq` - for JSON parsing in scripts
 4. `htop` / `nvtop` - for monitoring (nvtop shows GPU usage nicely)
 
-### Hardware Requirements
+### Hardware
 
 This homelab was done on the following systems
 
@@ -60,26 +63,7 @@ GPU: AMD Radeon 880M Graphics [Integrated]
 Memory: 24 GiB
 Swap: 8 GiB
 ```
-
-## Monitoring
-
-Ollama does not expose a native Prometheus metrics endpoint, so this setup uses [ollama-metrics](https://github.com/NorskHelsenett/ollama-metrics) as a transparent HTTP proxy in front of Ollama. All client requests (e.g. from open-webui) are routed through it, allowing it to instrument every request and expose the data at a `/metrics` endpoint for Prometheus to scrape.
-
-The full monitoring stack:
-
-```
-open-webui:8080 → ollama-metrics:11435 → ollama:11434
-                      ↓
-             exposes /metrics
-                      ↓
-             Prometheus :9090
-                      ↓
-              Grafana :3000
-```
-
-Metrics captured include prompt/completion token counts, request duration, time-per-token, and loaded model state.
-
-## Running based on setup
+## Running
 
 ### CPU
 ```
@@ -96,3 +80,80 @@ docker compose -f compose.yml -f compose.nvidia.yml --env-file ./env/dev/.env up
 docker compose -f compose.yml -f compose.amd.yml --env-file ./env/dev/.env up
 ```
 
+## Endpoints
+
+| Service        | URL                    | Description                                   |
+| -------------- | ---------------------- | --------------------------------------------- |
+| Open WebUI     | http://localhost:8080  | Chat interface for interacting with models    |
+| Ollama API     | http://localhost:11434 | Ollama REST API                               |
+| ollama-metrics | http://localhost:11435 | Proxied Ollama API + `/metrics` endpoint      |
+| Prometheus     | http://localhost:9090  | Metrics storage and query UI                  |
+| Grafana        | http://localhost:3000  | Dashboards (default login: `admin` / `admin`) |
+
+
+## Monitoring
+
+Ollama does not expose a native Prometheus metrics endpoint, so this setup uses [ollama-metrics](https://github.com/NorskHelsenett/ollama-metrics) as a transparent HTTP proxy in front of Ollama. All client requests (e.g. from open-webui) are routed through it, allowing it to instrument every request and expose the data at a `/metrics` endpoint for Prometheus to scrape.
+
+### Grafana
+
+Grafana is available at http://localhost:3000 (default credentials: `admin` / `admin`).
+
+A pre-built **Ollama Overview** dashboard is provisioned automatically on startup — no manual import needed. It includes the following panels:
+
+| Panel                                | Description                                                 |
+| ------------------------------------ | ----------------------------------------------------------- |
+| Request Rate                         | Requests per second hitting the Ollama API                  |
+| Request Duration                     | Overall latency distribution across all requests            |
+| Request Duration p95 (by Model)      | 95th-percentile latency broken down per model               |
+| Token Generation Time p95 (by Model) | How long generation takes at the 95th percentile, per model |
+| Token Generation Rate (by Model)     | Tokens generated per second, per model                      |
+| Generated Tokens by Model            | Total completion tokens over time, per model                |
+| Prompt Tokens by Model               | Total prompt tokens over time, per model                    |
+| Token Prompt Rate (by Model)         | Prompt tokens processed per second, per model               |
+| Average Time per Token by Model      | Mean milliseconds per generated token, per model            |
+
+<img src="docs/grafana_screenshot_01.png" alt="Ollama Overview dashboard" width="75%">
+
+## Architecture
+
+```mermaid
+graph TB
+    User(["👤 User"])
+
+    subgraph Docker["Docker Compose Stack"]
+        OpenWebUI["open-webui\n:8080"]
+        OllamaMetrics["ollama-metrics\n:11435\n(transparent proxy)"]
+        Ollama["ollama\n:11434"]
+        ModelManager["model-manager\n(init container)"]
+        Prometheus["prometheus\n:9090"]
+        Grafana["grafana\n:3000"]
+    end
+
+    subgraph GPU["Hardware (GPU)"]
+        NVIDIA["NVIDIA / AMD / CPU"]
+    end
+
+    subgraph Volumes["Named Volumes"]
+        OllamaVol[("ollama")]
+        OpenWebUIVol[("open-webui")]
+        PrometheusVol[("prometheus")]
+        GrafanaVol[("grafana")]
+    end
+
+    User -->|"chat / API"| OpenWebUI
+    User -->|"dashboards"| Grafana
+
+    OpenWebUI -->|"LLM requests"| OllamaMetrics
+    OllamaMetrics -->|"proxied requests"| Ollama
+    OllamaMetrics -->|"/metrics scrape"| Prometheus
+    Prometheus -->|"data source"| Grafana
+
+    ModelManager -->|"pull models on startup"| Ollama
+    Ollama <-->|"inference"| NVIDIA
+
+    Ollama --- OllamaVol
+    OpenWebUI --- OpenWebUIVol
+    Prometheus --- PrometheusVol
+    Grafana --- GrafanaVol
+```
