@@ -8,6 +8,8 @@ services:
     volumes:
       - ${OLLAMA_VOLUMES}
     restart: ${OLLAMA_RESTART}
+    environment:
+      - OLLAMA_CONTEXT_LENGTH=${OLLAMA_CONTEXT_LENGTH}
     deploy:
       resources:
         reservations:
